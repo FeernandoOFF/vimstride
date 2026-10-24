@@ -1,0 +1,2 @@
+import MacNavigation
+VimstrideApplication.run()

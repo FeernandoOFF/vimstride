@@ -1,0 +1,19 @@
+name: Swift checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Test core algorithms and native input routing
+        run: swift test
+      - name: Build and verify the macOS app
+        run: bash scripts/build-app.sh

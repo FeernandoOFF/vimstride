@@ -1,0 +1,16 @@
+[tasks.build]
+description = "Build and sign the native macOS app"
+run = "bash scripts/build-app.sh"
+
+[tasks.verify]
+description = "Run pure Swift and native routing tests"
+run = "swift test"
+
+[tasks.install]
+description = "Install the app in ~/Applications for Spotlight"
+run = "bash scripts/install-app.sh"
+
+[tasks.run]
+description = "Launch the native macOS app"
+depends = ["build"]
+run = 'open "build/Vimstride.app"'

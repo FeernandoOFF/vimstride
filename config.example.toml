@@ -1,0 +1,43 @@
+# Super = your Karabiner Caps Lock mapping: Command + Control + Shift.
+[general]
+hint_label_size = 13
+click_sound = true
+sound_volume = 0.25
+pointer_speed = 650.0
+diagnostics = false
+request_accessibility_on_start = false
+
+[bindings]
+free_mode = "command+control+shift"
+hint_mode = "command+control+shift+f"
+scroll_mode = "command+control+shift+g"
+focus_mode = "command+control+shift+v"
+move_left = "h"
+move_down = "j"
+move_up = "k"
+move_right = "l"
+left_click = "space"
+right_click = "r"
+fast_modifier = "right_shift"
+precision_modifier = "right_control"
+hint_next = "tab"
+hint_previous = "shift+tab"
+hint_click = "return"
+hint_focus = "option+return"
+hint_right_click = "shift+return"
+hint_command_click = "command+return"
+hint_cancel = "escape"
+hint_backspace = "backspace"
+hint_size_up = "equal"
+hint_size_down = "minus"
+scroll_next = "tab"
+scroll_previous = "shift+tab"
+scroll_left = "h"
+scroll_down = "j"
+scroll_up = "k"
+scroll_right = "l"
+scroll_half_down = "d"
+scroll_half_up = "u"
+scroll_top = "t"
+scroll_bottom = "b"
+scroll_cancel = "escape"
