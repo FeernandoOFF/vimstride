@@ -73,6 +73,10 @@ Bindings accept lowercase keys, side-specific modifiers, `cmd`, `ctrl`, `alt`, `
 "build/Vimstride.app/Contents/MacOS/Vimstride" --config config.example.toml --check-config
 ```
 
+To diagnose missing hints, run the installed executable with `--check-accessibility PID`, using the target application's process ID. This checks the diagnostic process's Accessibility permission and prints only activation status and target counts by role, never labels or application content. A command launched from a terminal or another app can have a different permission context from the background app; check Vimstride Settings for the running app's permission status.
+
+After replacing an ad hoc signed build, macOS can show Vimstride's Accessibility switch enabled while the app reports access denied. Quit Vimstride, remove its old Accessibility entry, add the installed app again, enable access, then relaunch it.
+
 Launch at login uses Apple's `SMAppService.mainApp`. It is optional and reflects the system's actual registration/approval state rather than a TOML flag.
 
 ## Architecture and verification
@@ -87,6 +91,6 @@ swift test
 bash scripts/build-app.sh
 ```
 
-The app uses no network services and never saves or transmits keystrokes, labels, screen content or app content. The old `diagnostics` field is accepted for config compatibility but does not log typed input. Native hooks are invalidated during normal shutdown; disabled hooks clear held input and are re-enabled. Secure Input and the quality of an application's Accessibility tree affect available targets. Chromium/Electron apps may expose only a window-level scroll fallback.
+The app uses no network services and never saves or transmits keystrokes, labels, screen content or app content. The old `diagnostics` field is accepted for config compatibility but does not log typed input. Native hooks are invalidated during normal shutdown; disabled hooks clear held input and are re-enabled. Hint, focus and scroll modes request Electron's accessibility tree using its documented `AXManualAccessibility` attribute, allowing a short warm-up on first activation. Secure Input and the quality of an application's Accessibility tree affect available targets; apps without accessible scroll regions still receive a window-level scroll fallback.
 
 This implements the requested movement, dragging, scrolling, element focus and click feedback workflow. It does not claim complete Homerow parity: text search, Mission Control navigation, click chaining, double-click hints and app-specific compatibility tuning remain future work.

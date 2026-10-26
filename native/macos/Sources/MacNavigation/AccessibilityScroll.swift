@@ -57,6 +57,8 @@ enum AccessibilityScroll {
     static func discover(pid: pid_t, screenBounds: [CGRect], pointer: CGPoint, isCancelled: () -> Bool = { false }) -> AccessibleScrollSnapshot? {
         let app = AXUIElementCreateApplication(pid)
         AXUIElementSetMessagingTimeout(app, 0.05)
+        AccessibilityPreparation.prepare(app, isCancelled: isCancelled)
+        guard !isCancelled() else { return nil }
         guard let window = AccessibilityHints.focusedWindow(app),
               let windowBounds = AccessibilityHints.bounds(window) else { return nil }
         let deadline = Date().addingTimeInterval(1.5)

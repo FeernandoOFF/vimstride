@@ -81,6 +81,8 @@ enum AccessibilityHints {
     static func discover(pid: pid_t, screenBounds: [CGRect], focusOnly: Bool = false, isCancelled: () -> Bool = { false }) -> AccessibleHintSnapshot? {
         let app = AXUIElementCreateApplication(pid)
         AXUIElementSetMessagingTimeout(app, 0.05)
+        AccessibilityPreparation.prepare(app, isCancelled: isCancelled)
+        guard !isCancelled() else { return nil }
         guard let window = focusedWindow(app), let windowBounds = bounds(window) else { return nil }
         let deadline = Date().addingTimeInterval(1.5)
         var stack: [(AXUIElement, CGRect)] = [(window, windowBounds)]

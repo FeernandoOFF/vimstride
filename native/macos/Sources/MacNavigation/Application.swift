@@ -228,6 +228,13 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWindowDelega
 public enum VimstrideApplication {
     public static func run() {
         let arguments = ProcessInfo.processInfo.arguments
+        if let index = arguments.firstIndex(of: "--check-accessibility") {
+            guard arguments.indices.contains(index + 1), let pid = Int32(arguments[index + 1]), pid > 0 else {
+                fputs("Usage: Vimstride --check-accessibility PID\n", stderr)
+                exit(2)
+            }
+            exit(AccessibilityDiagnostics.run(pid: pid))
+        }
         var url = NavigationConfig.configURL()
         if let index = arguments.firstIndex(of: "--config"), arguments.indices.contains(index + 1) { url = URL(fileURLWithPath: NSString(string: arguments[index + 1]).expandingTildeInPath) }
         if arguments.contains("--print-default-config") { print(NavigationConfig().toml, terminator: ""); return }
