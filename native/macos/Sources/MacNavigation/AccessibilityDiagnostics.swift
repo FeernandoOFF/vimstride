@@ -14,20 +14,26 @@ enum AccessibilityDiagnostics {
         }
         let app = AXUIElementCreateApplication(pid)
         AXUIElementSetMessagingTimeout(app, 0.05)
-        func manualState() -> String {
+        func activationState(_ name: String) -> String {
             var value: CFTypeRef?
-            let result = AXUIElementCopyAttributeValue(app, "AXManualAccessibility" as CFString, &value)
+            let result = AXUIElementCopyAttributeValue(app, name as CFString, &value)
             return "result=\(result.rawValue), enabled=\((value as? Bool).map(String.init) ?? "unknown")"
         }
-        print("Electron accessibility before: \(manualState())")
+        let attributes = ["AXManualAccessibility", "AXEnhancedUserInterface"]
+        for name in attributes { print("\(name) before: \(activationState(name))") }
         let top = NSScreen.screens.first?.frame.maxY ?? 0
         let screens = NSScreen.screens.map {
             CGRect(x: $0.frame.minX, y: top - $0.frame.maxY, width: $0.frame.width, height: $0.frame.height)
         }
         let snapshot = AccessibilityHints.discover(pid: pid, screenBounds: screens)
-        print("Electron accessibility after: \(manualState())")
+        for name in attributes { print("\(name) after: \(activationState(name))") }
         guard let snapshot else {
-            print("Focused window: unavailable")
+            if let window = AccessibilityHints.focusedWindow(app) {
+                let role = AccessibilityHints.attribute(window, kAXRoleAttribute) as? String ?? "unknown"
+                print("Focused window role: \(role); window geometry unavailable")
+            } else {
+                print("Focused window: unavailable")
+            }
             return 4
         }
         print("Clickable targets: \(snapshot.targets.count), partial: \(snapshot.partial)")
